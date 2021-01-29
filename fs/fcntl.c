@@ -30,6 +30,9 @@
 #include <asm/siginfo.h>
 #include <linux/uaccess.h>
 
+#define CREATE_TRACE_POINTS
+#include <trace/events/fcntl.h>
+
 #define SETFL_MASK (O_APPEND | O_NONBLOCK | O_NDELAY | O_DIRECT | O_NOATIME)
 
 static int setfl(int fd, struct file * filp, unsigned long arg)
@@ -429,6 +432,8 @@ static long do_fcntl(int fd, unsigned int cmd, unsigned long arg,
 	default:
 		break;
 	}
+
+	trace_fcntl(filp->f_inode, cmd, arg, &err);
 	return err;
 }
 

@@ -74,6 +74,9 @@
 
 #include "uid16.h"
 
+#define CREATE_TRACE_POINTS
+#include <trace/events/prctl.h>
+
 #ifndef SET_UNALIGN_CTL
 # define SET_UNALIGN_CTL(a, b)	(-EINVAL)
 #endif
@@ -2534,6 +2537,8 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 		error = -EINVAL;
 		break;
 	}
+
+	trace_prctl(option, arg2, arg3, arg4, arg5, &error);
 	return error;
 }
 
